@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Budget Overview</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #d4a5a5;
+        --secondary-color: #f8f4f1;
+        --accent-color: #fdfaf7;
+        --text-color: #6d4c41;
+        --light-text: #8d6e63;
+        --border-color: rgba(212, 165, 165, 0.15);
+        --success-color: #c8e6c9;
+        --warning-color: #ffe0b2;
+        --danger-color: #ffcdd2;
+        --white: #ffffff;
+        --light-gray: #fafafa;
+        --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--light-gray);
+        color: var(--text-color);
+        line-height: 1.5;
+        padding: 20px;
+        font-weight: 300;
+      }
+
+      .widget {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--white);
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+      }
+
+      /* Header */
+      .widget-header {
+        background: linear-gradient(135deg, var(--primary-color), #e6b8b8);
+        color: var(--white);
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-family: "Dancing Script", cursive;
+        font-size: 2.2rem;
+        font-weight: 600;
+      }
+
+      /* Budget Overview */
+      .widget-content {
+        padding: 20px;
+      }
+
+      /* Total Budget Progress Bar */
+      .total-budget-section {
+        margin-bottom: 24px;
+      }
+
+      .budget-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .budget-label {
+        font-family: "Inter", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--light-text);
+      }
+
+      .budget-amount {
+        font-family: "Playfair Display", serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .main-progress-container {
+        height: 16px;
+        background: var(--light-gray);
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .main-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), #e6b8b8);
+        border-radius: 8px;
+        transition: width 0.5s ease;
+        position: relative;
+      }
+
+      .progress-percentage {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: "Playfair Display", serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      /* Budget Cards */
+      .budget-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .budget-card {
+        background: var(--accent-color);
+        border-radius: 6px;
+        padding: 16px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+      }
+
+      .budget-card:hover {
+        box-shadow: 0 4px 12px rgba(212, 165, 165, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .budget-card h3 {
+        font-family: "Inter", sans-serif;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--light-text);
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .budget-card .budget-amount {
+        font-family: "Playfair Display", serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+
+      .budget-card.spent .budget-amount {
+        color: #e57373;
+      }
+
+      .budget-card.remaining .budget-amount {
+        color: #81c784;
+      }
+
+      .budget-card.percentage .budget-amount {
+        color: #ffb74d;
+      }
+
+      .sync-indicator {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--white);
+        padding: 8px 12px;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--light-text);
+        opacity: 0;
+        transition: opacity 0.3s;
+        border: 1px solid var(--border-color);
+      }
+
+      .sync-indicator.show {
+        opacity: 1;
+      }
+
+      .sync-indicator i {
+        color: var(--success-color);
+        font-size: 12px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .budget-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="widget">
+      <div class="widget-header">
+        <h1>Budget Overview</h1>
+      </div>
+
+      <div class="widget-content">
+        <!-- Total Budget Progress Bar -->
+        <div class="total-budget-section">
+          <div class="budget-info">
+            <span class="budget-label">Total Budget</span>
+            <span class="budget-amount" id="total-budget-amount">$0</span>
+          </div>
+          <div class="main-progress-container">
+            <div class="main-progress-bar" id="main-progress-bar">
+              <span class="progress-percentage" id="progress-percentage"
+                >0%</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget Cards -->
+        <div class="budget-cards">
+          <div class="budget-card spent">
+            <h3>Amount Spent</h3>
+            <div class="budget-amount" id="total-spent">$0</div>
+          </div>
+          <div class="budget-card remaining">
+            <h3>Remaining</h3>
+            <div class="budget-amount" id="total-remaining">$0</div>
+          </div>
+          <div class="budget-card percentage">
+            <h3>Percentage Used</h3>
+            <div class="budget-amount" id="percentage-used">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sync-indicator" id="sync-indicator">
+      <i class="fas fa-sync-alt"></i>
+      <span>Syncing data...</span>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Elements
+        const totalBudgetAmount = document.getElementById(
+          "total-budget-amount"
+        );
+        const totalSpentDisplay = document.getElementById("total-spent");
+        const totalRemainingDisplay =
+          document.getElementById("total-remaining");
+        const percentageUsedDisplay =
+          document.getElementById("percentage-used");
+        const mainProgressBar = document.getElementById("main-progress-bar");
+        const progressPercentage = document.getElementById(
+          "progress-percentage"
+        );
+        const syncIndicator = document.getElementById("sync-indicator");
+
+        // Data
+        let totalBudget = 0;
+        let expenses = [];
+
+        // Format currency
+        function formatCurrency(amount) {
+          return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 2,
+          }).format(amount);
+        }
+
+        // Load from local storage
+        function loadData() {
+          const savedBudget = localStorage.getItem("weddingTotalBudget");
+          const savedExpenses = localStorage.getItem("weddingExpenses");
+
+          if (savedBudget) {
+            totalBudget = parseFloat(savedBudget);
+          }
+
+          if (savedExpenses) {
+            expenses = JSON.parse(savedExpenses);
+          }
+
+          updateUI();
+        }
+
+        // Update UI
+        function updateUI() {
+          // Update budget displays
+          totalBudgetAmount.textContent = formatCurrency(totalBudget);
+
+          // Calculate total spent
+          const totalSpent = expenses.reduce(
+            (sum, expense) => sum + expense.amount,
+            0
+          );
+          totalSpentDisplay.textContent = formatCurrency(totalSpent);
+
+          // Calculate remaining
+          const remaining = totalBudget - totalSpent;
+          totalRemainingDisplay.textContent = formatCurrency(remaining);
+
+          // Calculate percentage used
+          const percentageUsed =
+            totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
+          percentageUsedDisplay.textContent = `${percentageUsed.toFixed(1)}%`;
+
+          // Update progress bar
+          const progressWidth = Math.min(percentageUsed, 100);
+          mainProgressBar.style.width = `${progressWidth}%`;
+          progressPercentage.textContent = `${percentageUsed.toFixed(1)}%`;
+
+          // Change color based on percentage
+          if (percentageUsed >= 100) {
+            mainProgressBar.style.background =
+              "linear-gradient(90deg, #e57373, #ef9a9a)";
+          } else if (percentageUsed >= 80) {
+            mainProgressBar.style.background =
+              "linear-gradient(90deg, #ffb74d, #ffcc80)";
+          } else {
+            mainProgressBar.style.background =
+              "linear-gradient(90deg, var(--primary-color), #e6b8b8)";
+          }
+        }
+
+        // Show sync indicator
+        function showSyncIndicator() {
+          syncIndicator.classList.add("show");
+          setTimeout(() => {
+            syncIndicator.classList.remove("show");
+          }, 1000);
+        }
+
+        // Listen for storage changes to sync with other components
+        window.addEventListener("storage", (event) => {
+          if (
+            event.key === "weddingTotalBudget" ||
+            event.key === "weddingExpenses"
+          ) {
+            loadData();
+            showSyncIndicator();
+          }
+        });
+
+        // Initialize
+        loadData();
+
+        // Refresh data every 2 seconds to stay in sync
+        setInterval(loadData, 2000);
+      });
+    </script>
+  </body>
+</html>
