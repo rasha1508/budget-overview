@@ -28,25 +28,27 @@
         --white: #ffffff;
         --light-gray: #fafafa;
         --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --heart-color: #f0d0d0; /* Light pink color for hearts */
+        --heart-filled-color: #d4a5a5; /* Filled heart color */
+        --heart-warning-color: #ffb74d; /* Warning heart color */
+        --heart-danger-color: #e57373; /* Danger heart color */
+        --amount-color: #8d6e63; /* Consistent color for amounts */
       }
-
       * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
-
       body {
         font-family: "Inter", sans-serif;
-        background-color: transparent;
+        background-color: var(--light-gray);
         color: var(--text-color);
         line-height: 1.5;
         padding: 20px;
         font-weight: 300;
       }
-
       .widget {
-        max-width: 900px;
+        max-width: 350px;
         margin: 0 auto;
         background: var(--white);
         border-radius: 8px;
@@ -54,160 +56,162 @@
         overflow: hidden;
         border: 1px solid var(--border-color);
       }
-
       /* Header */
       .widget-header {
-        background: linear-gradient(135deg, var(--primary-color), #e6b8b8);
-        color: var(--white);
-        padding: 20px;
-        text-align: center;
+        padding: 0;
+        height: 100px;
+        overflow: hidden;
+        position: relative;
       }
-
-      h1 {
-        font-family: "Dancing Script", cursive;
-        font-size: 2.2rem;
-        font-weight: 600;
+      .header-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
-
       /* Budget Overview */
       .widget-content {
-        padding: 20px;
+        padding: 10px;
       }
-
       /* Total Budget Progress Bar */
       .total-budget-section {
-        margin-bottom: 24px;
+        margin-bottom: 10px;
       }
-
       .budget-info {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
       }
-
       .budget-label {
         font-family: "Inter", sans-serif;
-        font-size: 0.9rem;
+        font-size: 0.7rem;
         font-weight: 500;
         color: var(--light-text);
       }
-
       .budget-amount {
         font-family: "Playfair Display", serif;
-        font-size: 1.2rem;
+        font-size: 0.85rem;
         font-weight: 600;
-        color: var(--primary-color);
+        color: var(--amount-color); /* Consistent color for all amounts */
       }
-
-      .main-progress-container {
-        height: 16px;
-        background: var(--light-gray);
-        border-radius: 8px;
-        overflow: hidden;
-        position: relative;
+      /* Heart Progress Bar - with more hearts */
+      .heart-progress-container {
+        display: flex;
+        justify-content: center;
+        margin: 8px 0;
       }
-
-      .main-progress-bar {
-        height: 100%;
-        background: linear-gradient(90deg, var(--primary-color), #e6b8b8);
-        border-radius: 8px;
-        transition: width 0.5s ease;
-        position: relative;
+      .heart {
+        font-size: 0.65rem; /* Smaller hearts to fit more */
+        color: var(--heart-color); /* Light pink color */
+        margin: 0 1px; /* Less space between hearts */
+        transition: all 0.3s ease;
       }
-
+      .heart.filled {
+        color: var(--heart-filled-color); /* Filled heart color */
+        animation: heartBeat 0.5s ease;
+      }
+      .heart.warning {
+        color: var(--heart-warning-color); /* Warning heart color */
+      }
+      .heart.danger {
+        color: var(--heart-danger-color); /* Danger heart color */
+      }
+      @keyframes heartBeat {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
       .progress-percentage {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        text-align: center;
         font-family: "Playfair Display", serif;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         font-weight: 600;
-        color: var(--text-color);
+        color: var(--amount-color); /* Consistent color */
+        margin-top: 3px;
       }
-
+      .budget-status {
+        text-align: center;
+        font-family: "Inter", sans-serif;
+        font-size: 0.7rem;
+        margin-top: 5px;
+        font-weight: 500;
+      }
+      .budget-status.on-track {
+        color: #81c784;
+      }
+      .budget-status.warning {
+        color: #ffb74d;
+      }
+      .budget-status.over-budget {
+        color: #e57373;
+      }
       /* Budget Cards */
       .budget-cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
+        gap: 6px;
       }
-
       .budget-card {
         background: var(--accent-color);
         border-radius: 6px;
-        padding: 16px;
+        padding: 6px;
         text-align: center;
         border: 1px solid var(--border-color);
         transition: all 0.2s ease;
       }
-
       .budget-card:hover {
         box-shadow: 0 4px 12px rgba(212, 165, 165, 0.1);
         transform: translateY(-2px);
       }
-
       .budget-card h3 {
         font-family: "Inter", sans-serif;
-        font-size: 0.8rem;
+        font-size: 0.6rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         color: var(--light-text);
-        margin-bottom: 8px;
+        margin-bottom: 3px;
         font-weight: 500;
       }
-
       .budget-card .budget-amount {
         font-family: "Playfair Display", serif;
-        font-size: 1.6rem;
+        font-size: 0.9rem;
         font-weight: 600;
         margin-bottom: 0;
+        color: var(--amount-color); /* Consistent color for all amounts */
       }
-
-      .budget-card.spent .budget-amount {
-        color: #e57373;
-      }
-
-      .budget-card.remaining .budget-amount {
-        color: #81c784;
-      }
-
-      .budget-card.percentage .budget-amount {
-        color: #ffb74d;
-      }
-
+      /* Sync Indicator */
       .sync-indicator {
         position: fixed;
         top: 20px;
         right: 20px;
         background: var(--white);
-        padding: 8px 12px;
+        padding: 4px 8px;
         border-radius: 16px;
         box-shadow: var(--card-shadow);
         display: flex;
         align-items: center;
-        gap: 6px;
-        font-size: 13px;
+        gap: 4px;
+        font-size: 10px;
         color: var(--light-text);
         opacity: 0;
         transition: opacity 0.3s;
         border: 1px solid var(--border-color);
       }
-
       .sync-indicator.show {
         opacity: 1;
       }
-
       .sync-indicator i {
         color: var(--success-color);
-        font-size: 12px;
+        font-size: 8px;
       }
-
       /* Responsive */
       @media (max-width: 768px) {
         .budget-cards {
           grid-template-columns: 1fr;
+        }
+        .heart {
+          font-size: 0.6rem;
         }
       }
     </style>
@@ -215,9 +219,8 @@
   <body>
     <div class="widget">
       <div class="widget-header">
-        <h1>Budget Overview</h1>
+        <img src="https://z-cdn-media.chatglm.cn/files/932d92ab-1ef4-4650-bf43-3546cefd05e2_pasted_image_1756920173930.png?auth_key=1788456189-33a8b130ad01435b86b805b9dede6214-0-d56b8d78491f590f50a99475a5e94467" alt="Wedding Budget" class="header-image">
       </div>
-
       <div class="widget-content">
         <!-- Total Budget Progress Bar -->
         <div class="total-budget-section">
@@ -225,38 +228,53 @@
             <span class="budget-label">Total Budget</span>
             <span class="budget-amount" id="total-budget-amount">$0</span>
           </div>
-          <div class="main-progress-container">
-            <div class="main-progress-bar" id="main-progress-bar">
-              <span class="progress-percentage" id="progress-percentage"
-                >0%</span
-              >
-            </div>
+          <div class="heart-progress-container" id="heart-progress-container">
+            <!-- 20 hearts, each representing 5% -->
+            <i class="fas fa-heart heart" data-value="5"></i>
+            <i class="fas fa-heart heart" data-value="10"></i>
+            <i class="fas fa-heart heart" data-value="15"></i>
+            <i class="fas fa-heart heart" data-value="20"></i>
+            <i class="fas fa-heart heart" data-value="25"></i>
+            <i class="fas fa-heart heart" data-value="30"></i>
+            <i class="fas fa-heart heart" data-value="35"></i>
+            <i class="fas fa-heart heart" data-value="40"></i>
+            <i class="fas fa-heart heart" data-value="45"></i>
+            <i class="fas fa-heart heart" data-value="50"></i>
+            <i class="fas fa-heart heart" data-value="55"></i>
+            <i class="fas fa-heart heart" data-value="60"></i>
+            <i class="fas fa-heart heart" data-value="65"></i>
+            <i class="fas fa-heart heart" data-value="70"></i>
+            <i class="fas fa-heart heart" data-value="75"></i>
+            <i class="fas fa-heart heart" data-value="80"></i>
+            <i class="fas fa-heart heart" data-value="85"></i>
+            <i class="fas fa-heart heart" data-value="90"></i>
+            <i class="fas fa-heart heart" data-value="95"></i>
+            <i class="fas fa-heart heart" data-value="100"></i>
           </div>
+          <div class="progress-percentage" id="progress-percentage">0%</div>
+          <div class="budget-status on-track" id="budget-status">On Track</div>
         </div>
-
         <!-- Budget Cards -->
         <div class="budget-cards">
-          <div class="budget-card spent">
+          <div class="budget-card">
             <h3>Amount Spent</h3>
             <div class="budget-amount" id="total-spent">$0</div>
           </div>
-          <div class="budget-card remaining">
+          <div class="budget-card">
             <h3>Remaining</h3>
             <div class="budget-amount" id="total-remaining">$0</div>
           </div>
-          <div class="budget-card percentage">
+          <div class="budget-card">
             <h3>Percentage Used</h3>
             <div class="budget-amount" id="percentage-used">0%</div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="sync-indicator" id="sync-indicator">
       <i class="fas fa-sync-alt"></i>
       <span>Syncing data...</span>
     </div>
-
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         // Elements
@@ -268,16 +286,20 @@
           document.getElementById("total-remaining");
         const percentageUsedDisplay =
           document.getElementById("percentage-used");
-        const mainProgressBar = document.getElementById("main-progress-bar");
+        const heartProgressContainer = document.getElementById(
+          "heart-progress-container"
+        );
         const progressPercentage = document.getElementById(
           "progress-percentage"
         );
+        const budgetStatus = document.getElementById("budget-status");
         const syncIndicator = document.getElementById("sync-indicator");
-
+        const hearts = heartProgressContainer.querySelectorAll(".heart");
+        
         // Data
         let totalBudget = 0;
         let expenses = [];
-
+        
         // Format currency
         function formatCurrency(amount) {
           return new Intl.NumberFormat("en-US", {
@@ -286,62 +308,80 @@
             minimumFractionDigits: 2,
           }).format(amount);
         }
-
+        
         // Load from local storage
         function loadData() {
           const savedBudget = localStorage.getItem("weddingTotalBudget");
           const savedExpenses = localStorage.getItem("weddingExpenses");
-
+          
           if (savedBudget) {
             totalBudget = parseFloat(savedBudget);
           }
-
+          
           if (savedExpenses) {
             expenses = JSON.parse(savedExpenses);
           }
-
+          
           updateUI();
         }
-
+        
         // Update UI
         function updateUI() {
           // Update budget displays
           totalBudgetAmount.textContent = formatCurrency(totalBudget);
-
+          
           // Calculate total spent
           const totalSpent = expenses.reduce(
             (sum, expense) => sum + expense.amount,
             0
           );
           totalSpentDisplay.textContent = formatCurrency(totalSpent);
-
+          
           // Calculate remaining
           const remaining = totalBudget - totalSpent;
           totalRemainingDisplay.textContent = formatCurrency(remaining);
-
+          
           // Calculate percentage used
           const percentageUsed =
             totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
           percentageUsedDisplay.textContent = `${percentageUsed.toFixed(1)}%`;
-
-          // Update progress bar
-          const progressWidth = Math.min(percentageUsed, 100);
-          mainProgressBar.style.width = `${progressWidth}%`;
           progressPercentage.textContent = `${percentageUsed.toFixed(1)}%`;
-
-          // Change color based on percentage
-          if (percentageUsed >= 100) {
-            mainProgressBar.style.background =
-              "linear-gradient(90deg, #e57373, #ef9a9a)";
-          } else if (percentageUsed >= 80) {
-            mainProgressBar.style.background =
-              "linear-gradient(90deg, #ffb74d, #ffcc80)";
+          
+          // Update budget status
+          budgetStatus.classList.remove("on-track", "warning", "over-budget");
+          if (percentageUsed < 80) {
+            budgetStatus.textContent = "On Track";
+            budgetStatus.classList.add("on-track");
+          } else if (percentageUsed < 100) {
+            budgetStatus.textContent = "Getting Close to Budget";
+            budgetStatus.classList.add("warning");
           } else {
-            mainProgressBar.style.background =
-              "linear-gradient(90deg, var(--primary-color), #e6b8b8)";
+            budgetStatus.textContent = "Over Budget!";
+            budgetStatus.classList.add("over-budget");
           }
+          
+          // Update heart progress
+          updateHeartProgress(percentageUsed);
         }
-
+        
+        // Update heart progress
+        function updateHeartProgress(percentage) {
+          hearts.forEach((heart) => {
+            const heartValue = parseInt(heart.getAttribute("data-value"));
+            heart.classList.remove("filled", "warning", "danger");
+            
+            if (percentage >= heartValue) {
+              if (percentage >= 100) {
+                heart.classList.add("danger");
+              } else if (percentage >= 80) {
+                heart.classList.add("warning");
+              } else {
+                heart.classList.add("filled");
+              }
+            }
+          });
+        }
+        
         // Show sync indicator
         function showSyncIndicator() {
           syncIndicator.classList.add("show");
@@ -349,7 +389,7 @@
             syncIndicator.classList.remove("show");
           }, 1000);
         }
-
+        
         // Listen for storage changes to sync with other components
         window.addEventListener("storage", (event) => {
           if (
@@ -360,10 +400,10 @@
             showSyncIndicator();
           }
         });
-
+        
         // Initialize
         loadData();
-
+        
         // Refresh data every 2 seconds to stay in sync
         setInterval(loadData, 2000);
       });
